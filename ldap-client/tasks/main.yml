@@ -1,0 +1,58 @@
+---
+- name: set distro
+  set_fact:
+    ansible_distro: "{{ ansible_distribution|lower|replace('\"', '') }}"
+
+- name: gather os specific variables
+  include_vars: "{{ item }}"
+  with_first_found:
+    - files:
+      - "{{ ansible_distro }}-{{
+            ansible_distribution_version|lower|replace('/', '_') }}.yml"
+      - "{{ ansible_distro }}-{{ ansible_distribution_release }}.yml"
+      - "{{ ansible_distro }}-{{
+            ansible_distribution_major_version|lower|replace('/', '_') }}.yml"
+      - "{{ ansible_distro }}.yml"
+      - "{{ ansible_os_family|lower }}.yml"
+      paths:
+      - ../vars
+      skip: true
+
+- name: Install Packages
+  import_tasks: install_packages.yml
+
+- name: Enable NTP
+  import_tasks: enable_ntp.yml
+
+- name: Override nsswitch.conf
+  template:
+    src: nsswitch.j2
+    dest: /etc/nsswitch.conf
+
+- name: Configure PAM
+  import_tasks: configure_pam.yml
+
+# - name: SSH public keys via LDAP
+#   import_tasks: configure_sshkeys.yml
+
+- name: Copy certificate from server
+  import_tasks: copy_cert.yml
+  when: tls == "yes"
+
+- name: Configure LDAP conf
+  import_tasks: configure_conf.yml
+
+- name: Configure NSLCD
+  template:
+    src: nslcd.conf.j2
+    dest: /etc/nslcd.conf
+
+- name: Restart NSLCD
+  service:
+    name: nslcd
+    state: restarted
+
+- name: Restart NSCD
+  service:
+    name: nscd
+    state: restarted

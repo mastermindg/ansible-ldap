@@ -1,0 +1,18 @@
+---
+- name: Template for Pre-fill
+  template:
+    src: debconf.j2
+    dest: /root/debconf.txt
+    owner: root
+    mode: 0755
+
+- name: Pre-fill LDAP configuration
+  command: debconf-set-selections < /root/debconf.txt
+  changed_when: "False"
+
+- name: Install Packages
+  apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: "yes"
+  with_items: "{{ base_packages }} + {{ packages }}"

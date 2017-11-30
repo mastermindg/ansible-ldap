@@ -1,0 +1,15 @@
+base_packages: 
+  - ldap-utils
+  - python-ldap
+  - ntp
+  - ntpstat
+openldap_domain_middle: kensawesome
+openldap_domain_top: priv
+openldap_organization_name: "{{ openldap_domain_middle }}"
+openldap_domain: "{{ openldap_domain_middle }}.{{ openldap_domain_top }}"
+openldap_adminpw: pass123
+openldap_rootpw: myroot123
+openldap_proxypw: proxypass123
+openldap_userpw: J3624xlZYMET
+tls: "yes"
+local_certs_path: "/vagrant/certs"

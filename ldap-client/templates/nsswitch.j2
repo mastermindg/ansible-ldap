@@ -1,0 +1,16 @@
+#{{ ansible_managed }}
+
+passwd:         compat {{ 'ldap' if 'passwd' in openldap_nsswitch else '' }}
+group:          compat {{ 'ldap' if 'group' in openldap_nsswitch else ''}}
+shadow:         compat {{ 'ldap' if 'shadow' in openldap_nsswitch else ''}}
+gshadow:        files
+
+hosts:          files dns {{ 'ldap' if 'hosts' in openldap_nsswitch else ''}}
+networks:       files
+
+protocols:      db files {{ 'ldap' if 'protocols' in openldap_nsswitch else ''}}
+services:       db files {{ 'ldap' if 'services' in openldap_nsswitch else ''}}
+ethers:         db files {{ 'ldap' if 'ethers' in openldap_nsswitch else ''}}
+rpc:            db files {{ 'ldap' if 'rpc' in openldap_nsswitch else ''}}
+
+netgroup:       nis

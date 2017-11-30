@@ -1,0 +1,17 @@
+---
+# Copy cacert from local
+- name: create cert directory
+  file:
+    path: /etc/ldap/certs
+    owner: root
+    group: root
+    mode: 0755
+    recurse: yes
+
+- name: copy cacert from local (previous fetch)
+  copy:
+    src: "/tmp/cacert.pem"
+    dest: "/etc/ldap/certs/cacert.pem"
+    owner: root
+    group: root
+    mode: 0644

@@ -1,0 +1,17 @@
+---
+- name: Setup Certificate
+  import_tasks: setup_cert.yml
+  when: tls == "yes"
+
+- name: Setup TLS
+  import_tasks: setup_tls.yml
+  when: tls == "yes"
+
+- name: Create Groups
+  import_tasks: create_groups.yml
+
+- name: Create Proxy User
+  import_tasks: create_proxy_user.yml
+
+- name: Create User
+  import_tasks: create_user.yml

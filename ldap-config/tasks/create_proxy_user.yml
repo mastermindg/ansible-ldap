@@ -1,0 +1,26 @@
+---
+- name: Create MD5 Hash
+  command: "slappasswd -v -h {md5} -s {{ openldap_proxypw }}"
+  register: md5_proxy
+  changed_when: "False"
+
+- name: Store MD5 Hash
+  set_fact:
+    md5proxy: '{{ md5_proxy.stdout | trim }}'
+
+- name: Create Service Bind Account
+  ldap_entry:
+    dn: "cn=serviceid,ou=system-accounts,dc={{ openldap_domain_middle }},dc={{ openldap_domain_top }}"
+    bind_dn: "cn=admin,dc={{ openldap_domain_middle }},dc={{ openldap_domain_top }}"
+    bind_pw: "{{ openldap_adminpw }}"
+    start_tls: "{{ tls }}"
+    validate_certs: "no"
+    objectClass:
+      - inetOrgPerson
+      - person
+    attributes:
+      cn: The Proxy
+      sn: User
+      givenName: Server ID
+      description: The Proxy User
+      userPassword: "{{ md5proxy }}"

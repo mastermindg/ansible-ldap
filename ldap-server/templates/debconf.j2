@@ -1,0 +1,14 @@
+slapd	slapd/password2	password {{ openldap_adminpw }}
+slapd	slapd/password1	password {{ openldap_adminpw }}
+slapd	shared/organization	string	{{ openldap_organization_name }}
+slapd	slapd/purge_database	boolean	true
+slapd	slapd/unsafe_selfwrite_acl	note
+slapd	slapd/domain	string	{{ openldap_domain }}
+slapd	slapd/backend select MDB
+slapd	slapd/password_mismatch	note
+slapd	slapd/move_old_database	boolean	true
+slapd	slapd/dump_database {{ openldap_organization_name }}
+slapd slapd/dump_database_destdir     string  /var/backups/slapd-VERSION
+slapd	slapd/no_configuration	boolean	false
+slapd	slapd/allow_ldap_v2	boolean	false
+slapd	slapd/invalid_config	boolean	true

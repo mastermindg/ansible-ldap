@@ -1,0 +1,4 @@
+dn: cn=config
+changetype: modify
+add: olcServerID
+olcServerID: {{ inventory_hostname_short[-1] }}

@@ -1,0 +1,52 @@
+packages:
+  - libnss-ldap
+  - libpam-ldap
+  - nscd
+  - nslcd
+  - libsasl2-dev
+  - python-dev
+  - libldap2-dev
+  - libssl-dev
+openldap_searchdn: "ou=users,dc={{ openldap_domain_middle }},dc={{ openldap_domain_top }}"
+openldap_basedn: "dc={{ openldap_domain_middle }},dc={{ openldap_domain_top }}"
+openldap_binddn: "cn=serviceid,ou=system-accounts,dc={{ openldap_domain_middle }},dc={{ openldap_domain_top }}"
+openldap_nsswitch:
+  - group
+  - hosts
+  - passwd
+  - shadow
+openldap_version: 3
+openldap_localroot: "false"
+openldap_loginrequired: "true"
+ldap_auth_config:
+  dbrootlogin:
+    type: boolean
+    value: "false"
+  rootbinddn:
+    type: string
+    value: "cn=admin,dc={{ openldap_domain_middle }},dc={{ openldap_domain_top }}"
+  rootbinpw:
+    type: password
+    value: myroot123
+  dblogin:
+    type: boolean
+    value: "false"
+  binddn:
+    type: string
+    value: "cn=serviceid,ou=system-accounts,dc={{ openldap_domain_middle }},dc={{ openldap_domain_top }}"
+  bindpw:
+    type: password
+    value: proxypass123
+  ldapns/base-dn:
+    type: string
+    value: "dc={{ openldap_domain_middle }},dc={{ openldap_domain_top }}"
+  ldapns/ldap_version:
+    type: select
+    value: 3
+  ldapns/ldap-server:
+    type: string
+    value: "ldap://ldapserver"
+  pam_password:
+    type: select
+    value: md5
+ldap_nscd: "true"

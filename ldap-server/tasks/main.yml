@@ -1,0 +1,12 @@
+---
+- name: Install Packages
+  import_tasks: install_packages.yml
+
+- name: Enable NTP
+  import_tasks: enable_ntp.yml
+
+- name: Set Root Password for config
+  import_tasks: set_root_password.yml
+
+- name: Setup Loging
+  import_tasks: setup_logging.yml

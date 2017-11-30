@@ -1,0 +1,5 @@
+---
+# handlers file for nscd
+- name: restart nscd
+  service: name=nscd state=restarted
+  when: ldap_nscd

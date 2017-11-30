@@ -1,0 +1,81 @@
+---
+- name: Generate Private Key
+  shell: certtool --generate-privkey > /etc/ssl/private/cakey.pem
+  changed_when: "False"
+
+- name: ca info
+  template:
+    src: ca.info.j2
+    dest: /etc/ssl/ca.info
+    owner: root
+    mode: 0755
+
+- name: create cacert
+  command: certtool --generate-self-signed \
+    --load-privkey /etc/ssl/private/cakey.pem \
+    --template /etc/ssl/ca.info \
+    --outfile /etc/ssl/certs/cacert.pem
+  changed_when: "False"
+
+## Eventually pick up the cert from here via fact
+- name: store cacert
+  command: cat /etc/ssl/certs/cacert.pem
+  register: cacertdirty
+  changed_when: "False"
+
+- name: Store cacert
+  set_fact:
+    cacert: '{{ cacertdirty.stdout | trim }}'
+
+- name: generate slapd key
+  command: certtool --generate-privkey \
+    --bits 2048 \
+    --outfile /etc/ssl/private/ldap_slapd_key.pem
+  changed_when: "False"
+
+# - debug:
+#     msg: "{{ cacert }}"
+
+- name: ldap.info template
+  template:
+    src: ldap.info.j2
+    dest: /etc/ssl/ldap.info
+    owner: root
+    mode: 0755
+
+- name: Create the server's certificate
+  command: certtool --generate-certificate \
+    --load-privkey /etc/ssl/private/ldap_slapd_key.pem \
+    --load-ca-certificate /etc/ssl/certs/cacert.pem \
+    --load-ca-privkey /etc/ssl/private/cakey.pem \
+    --template /etc/ssl/ldap.info \
+    --outfile /etc/ssl/certs/ldap_slapd_cert.pem
+  changed_when: "False"
+
+# For now fetch it and make it available locally
+- name: fetch cacert
+  fetch:
+    src: "{{ item }}"
+    dest: "{{ local_certs_path }}/{{ item }}"
+    flat: "yes"
+  with_items:
+    - /etc/ssl/certs/ldap_slapd_cert.pem
+    - /etc/ssl/private/ldap_slapd_key.pem
+    - /etc/ssl/certs/cacert.pem
+
+- name: Set perms on key
+  file:
+    path: /etc/ssl/private/ldap_slapd_key.pem
+    group: openldap
+    mode: 0640
+
+- name: Add Openldap user to ssl-cert group
+  user:
+    name: openldap
+    groups: ssl-cert
+    append: "yes"
+
+- name: Restart slapd
+  service:
+    name: slapd
+    state: restarted

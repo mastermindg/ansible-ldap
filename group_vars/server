@@ -1,0 +1,8 @@
+packages:
+ - slapd
+ - gnutls-bin
+ - ssl-cert
+openldap_servercountry: US
+openldap_serverstate: Massachusetts
+openldap_serverlocation: Boston
+openldap_serverorganization: IT

@@ -1,0 +1,16 @@
+---
+# Cert copied earlier
+- name: Set ldap.conf from scratch based on variables
+  template:
+    src: ldap.conf.j2
+    dest: /etc/ldap.conf
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Set TLS cert in conf
+  lineinfile:
+    path: /etc/ldap/ldap.conf
+    regexp: '^TLS_CACERT'
+    line: 'TLS_CACERT      /etc/ldap/certs/cacert.pem'
+  when: tls == "yes"

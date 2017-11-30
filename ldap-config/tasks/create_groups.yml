@@ -1,0 +1,27 @@
+---
+- name: Create Users OU
+  ldap_entry:
+    dn: "ou=users,dc={{ openldap_domain_middle }},dc={{ openldap_domain_top }}"
+    bind_dn: "cn=admin,dc={{ openldap_domain_middle }},dc={{ openldap_domain_top }}"
+    bind_pw: "{{ openldap_adminpw }}"
+    start_tls: "{{ tls }}"
+    validate_certs: "no"
+    objectClass: organizationalUnit
+
+- name: Create Groups OU
+  ldap_entry:
+    dn: "ou=groups,dc={{ openldap_domain_middle }},dc={{ openldap_domain_top }}"
+    bind_dn: "cn=admin,dc={{ openldap_domain_middle }},dc={{ openldap_domain_top }}"
+    bind_pw: "{{ openldap_adminpw }}"
+    start_tls: "{{ tls }}"
+    validate_certs: "no"
+    objectClass: organizationalUnit
+
+- name: Create System Accounts OU
+  ldap_entry:
+    dn: "ou=system-accounts,dc={{ openldap_domain_middle }},dc={{ openldap_domain_top }}"
+    bind_dn: "cn=admin,dc={{ openldap_domain_middle }},dc={{ openldap_domain_top }}"
+    bind_pw: "{{ openldap_adminpw }}"
+    start_tls: "{{ tls }}"
+    validate_certs: "no"
+    objectClass: organizationalUnit

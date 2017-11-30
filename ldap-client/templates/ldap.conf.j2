@@ -1,0 +1,18 @@
+#{{ ansible_managed }}
+
+base {{ openldap_basedn }}
+
+uri {% for server in groups['server'] %}ldap://{{ server }} {% endfor %}
+
+ldap_version {{ openldap_version }}
+
+binddn {{ openldap_binddn }}
+bindpw {{ openldap_proxypw }}
+
+pam_password md5
+{% if tls == "yes" %}
+ssl start_tls
+tls_checkpeer yes
+tls_cacertfile /etc/ldap/certs/cacert.pem
+{% else %}
+{% endif %}

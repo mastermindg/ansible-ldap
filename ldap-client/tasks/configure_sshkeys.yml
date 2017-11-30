@@ -1,0 +1,12 @@
+---
+- name: Set Keys Command for SSH
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^AuthorizedKeysCommand'
+    line: 'AuthorizedKeysCommand /usr/local/bin/ssh-ldap-pubkey-wrapper'
+
+- name: Set Keys Command User for SSH
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^AuthorizedKeysCommandUser'
+    line: 'AuthorizedKeysCommandUser nobody'

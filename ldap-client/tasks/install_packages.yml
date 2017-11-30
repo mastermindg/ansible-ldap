@@ -1,0 +1,15 @@
+---
+- name: install pip
+  apt:
+    pkg: python-pip
+
+- name: install packages
+  apt:
+    pkg: "{{ item }}"
+  with_items: "{{ base_packages }} + {{ packages }}"
+  register: ldap_install
+
+- name: install pubkey package
+  pip:
+    name: "ssh-ldap-pubkey"
+    state: present

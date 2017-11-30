@@ -1,0 +1,47 @@
+---
+# http://www.itzgeek.com/how-tos/linux/centos-how-tos/configure-openldap-multi-master-replication-linux.html
+- name: Add ldif files
+  copy:
+    src: "files/{{ item }}"
+    dest: "/tmp/{{ item }}"
+  with_items:
+    - mod_syncprov.ldif
+    - syncprov.ldif
+  changed_when: "False"
+
+- name: Configure syncprov
+  command: "ldapadd -Y EXTERNAL -H ldapi:/// -f /tmp/{{ item }}"
+  with_items:
+    - mod_syncprov.ldif
+    - syncprov.ldif
+  changed_when: "False"
+
+- name: Set replication id
+  block:
+    - name: set it
+      template:
+        src: olcserverid.ldif.j2
+        dest: /tmp/olcserverid.ldif
+    - name: push it
+      command: ldapadd -Y EXTERNAL -H ldapi:/// -f /tmp/olcserverid.ldif
+      changed_when: "False"
+
+- name: Replicate Config
+  block:
+    - name: set it
+      template:
+        src: replicate_config.ldif.j2
+        dest: /tmp/replicate_config.ldif
+    - name: push it
+      command: ldapadd -Y EXTERNAL -H ldapi:/// -f /tmp/replicate_config.ldif
+      changed_when: "False"
+
+- name: Replicate User
+  block:
+    - name: set it
+      template:
+        src: replicate_user.ldif.j2
+        dest: /tmp/replicate_user.ldif
+    - name: push it
+      command: ldapadd -Y EXTERNAL -H ldapi:/// -f /tmp/replicate_user.ldif
+      changed_when: "False"

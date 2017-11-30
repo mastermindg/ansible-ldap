@@ -1,0 +1,6 @@
+---
+- name: enable ntp daemon
+  service:
+    name: ntp
+    enabled: yes
+    state: restarted
