@@ -27,8 +27,8 @@
   roles:
     - ldap-singlecert
 
-# - name: Install OpenLDAP client
-#   hosts: client
-#   become: "yes"
-#   roles:
-#     - ldap-client
+- name: Install OpenLDAP client
+  hosts: client
+  become: "yes"
+  roles:
+    - ldap-client
