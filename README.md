@@ -3,8 +3,9 @@
 Installs 2 Master-Master replicated OpenLDAP servers and a client system to authenticate against them all running on Ubuntu 16.04.
 
 Couple of things:
-1) A single slef-signed certificate is generated and shared between the servers
+1) A self-signed CA Certificate is generated on ldapserver1.
 2) It's copied for distribution using the variable local_certs_path
+3) The CA Certificate is used to build the server certificates and passed to the client.
 3) TLS can be turned off-on by using the TLS variable
 
 First create an instance somewhere that's reachable - cloud or local. Here's an example using the kvm-install role:
