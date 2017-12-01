@@ -87,10 +87,26 @@ class SharedVariables
 end
 
 myshare = SharedVariables.new
-setupscript = myshare.setupscript
+# setupscript = myshare.setupscript
 machines = myshare.machines
 ips = myshare.set_ips
 myshare.build_inventory
+
+# Inline Script
+setupscript = <<SCRIPT
+if [ ! -f /tmp/setuprun ]; then
+  touch /tmp/setuprun
+else
+  echo "Initial setup has already been run...skipping"
+  exit
+fi
+
+echo "Add Vagrant IP's to etc hosts for name resolution"
+# IP addresses are passed to this script via provisioner
+for var in "$@"; do
+    echo "$var" | sudo tee -a /etc/hosts > /dev/null 2>&1
+done
+SCRIPT
 
 Vagrant.configure(2) do |config|
   config.vm.box_check_update = false
@@ -105,12 +121,14 @@ Vagrant.configure(2) do |config|
   end
 
   machines.each do |machine|
-    name = machine['name']
-    ip = machine['ip']
-    config.vm.define name do |node|
-      node.vm.hostname = name
-      node.vm.network :private_network, ip: ip
-      config.vm.provision 'shell', path: setupscript, args: ips
+    config.vm.define machine['name'] do |node|
+      node.vm.hostname = machine['name']
+      node.vm.network :private_network, ip: machine['ip']
+      config.vm.provision 'shell' do |s|
+        s.inline = setupscript
+        s.args   = ips
+      end
+      # config.vm.provision 'shell', path: setupscript, args: ips
       node.vm.provision :ansible_local do |ansible|
         ansible.playbook = 'site.yml'
         ansible.inventory_path = 'inventory'
