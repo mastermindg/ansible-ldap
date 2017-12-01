@@ -18,14 +18,17 @@ Then provision the servers:
 ansible-playbook -i inventory/ldap playbooks/ldap/site.yml
 ```
 
+## Vagrant
+
 Testing with Vagrant. Requires the vagrant-triggers plugin.
 
 This will create three Virtualbox "machines", 2 LDAP servers and 1 client:
 
 ```
+vagrant plugin install vagrant-triggers
 vagrant up
-vagrant ssh ldapserver1
-vagrant ssh ldapclient1
+#vagrant ssh ldapserver1/2
+#vagrant ssh ldapclient1
 ```
 
 
