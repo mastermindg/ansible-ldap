@@ -1,9 +1,18 @@
 ---
-- name: Setup Certificate
-  import_tasks: setup_cert.yml
+- name: Copy CACert to server
+  copy:
+    src: "{{ local_certs_path }}{{ item }}"
+    dest: "{{ item }}"
+  with_items:
+    - /etc/ssl/certs/cacert.pem
+    - /etc/ssl/private/cakey.pem
   when: tls == "yes"
 
-- name: Setup TLS
+- name: Setup server certs
+  import_tasks: setup_server_certs.yml
+  when: tls == "yes"
+
+- name: Setup tls
   import_tasks: setup_tls.yml
   when: tls == "yes"
 
