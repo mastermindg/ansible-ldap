@@ -34,9 +34,9 @@ vagrant up
 
 ##TODO:
 
-Completely remove debconf dependency
-Replicate with TLS
-Not entirely sure that config replication is working
+- Completely remove debconf dependency
+- Replicate with TLS
+- Not entirely sure that config replication is working
 
 ##Useful commands:
 
