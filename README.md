@@ -40,7 +40,7 @@ The vagrant-restart script can be used for testing to clean up the environment a
 - Replicate both ways with TLS
 - Not entirely sure that config replication is working
 
-##Useful commands:
+## Useful commands:
 
 ldapsearch -W -D "cn=admin,dc=example,dc=com" -b "dc=example,dc=com" -s sub "objectclass=*"
 
