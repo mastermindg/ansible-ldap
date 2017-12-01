@@ -10,7 +10,8 @@ Couple of things:
 
 First create an instance somewhere that's reachable - cloud or local. Here's an example using the kvm-install role:
 
-```ansible-playbook -i "power2.kensnet.priv," --extra-vars "vm_hostname=ldap1" playbooks/kvm-install/site.yml
+```
+ansible-playbook -i "power2.kensnet.priv," --extra-vars "vm_hostname=ldap1" playbooks/kvm-install/site.yml
 ```
 
 Then provision the servers:
