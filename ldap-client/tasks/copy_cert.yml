@@ -10,7 +10,7 @@
 
 - name: copy cacert from local (previous fetch)
   copy:
-    src: "/tmp/cacert.pem"
+    src: "{{ local_certs_path }}/etc/ssl/certs/cacert.pem"
     dest: "/etc/ldap/certs/cacert.pem"
     owner: root
     group: root
