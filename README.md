@@ -32,6 +32,7 @@ vagrant up
 #vagrant ssh ldapclient1
 ```
 
+The vagrant-restart script can be used for testing to clean up the environment and start fresh.
 
 ##TODO:
 
